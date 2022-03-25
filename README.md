@@ -182,4 +182,33 @@ Link student names in index worksheet to detail data in class worksheet    Hyper
     proc print data=sashelp.class;
     run;quit;
     ods excel close;
+    
+    _ __   _____      _____ _ __    _____  _____ ___| |         
+   | `_ \ / _ \ \ /\ / / _ \ `__|  / _ \ \/ / __/ _ \ |         
+   | | | |  __/\ V  V /  __/ |    |  __/>  < (_|  __/ |         
+   |_| |_|\___| \_/\_/ \___|_|     \___/_/\_\___\___|_|         
+                                                                
+    options nolabel;                                            
+                                                                
+    %utlfkil(d:\xls\sdtm.xlsx);  * delete;                      
+                                                                
+    ods excel file="d:\xls\sdtm.xlsx" options(sheet_name="TOC");
+                                                                
+    proc report data=sashelp.class(obs=1)                       
+      style(column)={tagattr='wraptext:no' width=100%};         
+          define name   / display  style={color=blue};          
+          compute name;                                         
+            if name = 'Alfred' then                             
+                 call define('name','url',"sdtm.xlsx#DM!A1");   
+          endcomp;                                              
+    run;quit;                                                   
+                                                                
+    ods excel options(sheet_name="DM");                         
+                                                                
+    proc report data=sashelp.class missing;                     
+    ;run;quit;                                                  
+                                                                
+    ods excel close;                                            
+    options label;                                              
+
 
